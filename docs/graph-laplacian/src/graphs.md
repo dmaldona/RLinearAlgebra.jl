@@ -176,7 +176,7 @@ subgraph of $G=(V,E)$, denoted by $T=(V,E')$, where the vertices are kept the
 same but $E' \subset E$ such that $T$ is a tree. In our example, a spanning
 tree can be generated in multiple ways. As examples,
 - a spanning tree can be made with $E' = \lbrace a, c, d, e \rbrace$
-- A spanning tree can be made with $E' = \lbrace b, g, d, f \rbrace$.
+- a spanning tree can be made with $E' = \lbrace b, g, d, f \rbrace$.
 
 ### Properties of Nodes
 
@@ -198,5 +198,120 @@ which is identical, unsurprisingly, to the degree matrix of the directed graph.
 
 ## Adjacency Matrix & Weighted Graphs
 
+Up until now, we have presented a few ways of describing a (directed) graph that
+have focused primarily on the relationships between edges and nodes. For
+example, we introduced the incidence matrix, which describes which edges
+correspond to which nodes (and, in the case of a directed graph, the direction
+of these relationships). Similarly, we used the degree matrix to summarize the
+number of edges that are connected to a node.
+
+Our goal now is to introduce a matrix to describe the relationship between
+nodes; specifically, this matrix will describe which nodes are neighbors (i.e.,
+they are connected by a path of length $1$.). Define the **adjacency matrix** of
+a (directed) graph $G=(V,E)$ by the matrix $A$ where
+
+$$A_{ij} = \begin{cases}
+1 & \exists e \in E: ~ v_i,v_j \not\in e, ~ i \neq j, \\
+0 & \textrm{otherwise}.
+\end{cases}$$
+
+For the directed and undirected graphs shown above,
+
+$$A = \begin{bmatrix}
+0 & 1 & 1 & 0 & 0 \\
+1 & 0 & 1 & 1 & 1 \\
+1 & 1 & 0 & 1 & 0 \\
+0 & 1 & 1 & 0 & 1 \\
+0 & 1 & 0 & 1 & 0
+\end{bmatrix}.$$
+
+We see that the adjacency matrix fully describes a graph $G$, as we know how
+many nodes there are and to which nodes they are connected. In our example,
+the value $A_{12} = 1$, which implies that $v_1$ is connected by an edge to
+node $v_2$. Unfortunately, for a directed graph $G$, $A$ loses the direction
+associated with the edges of a directed graph.
+
+The adjacency matrix also gives us a starting point for generalizing the graphs
+that we have been discussing to the case where the edges have some weight, where
+the weights represent the relative strength of the connection between two nodes
+in the graph that share an edge.
+
+To be specific, a **weighted graph** is a pair $G=(V,W)$,
+- where $V = \lbrace v_1,\ldots,v_m \rbrace$ is a collection of *nodes*;
+- and $W \in \mathbb{R}_{\geq 0}^{|V| \times |V|}$, where $W_{ii} = 0$ for  all $i=1,\ldots,m$ and $W$ is symmetric, is called the *weight matrix*.
+
+Notice that $W$ generalizes the role of the adjacency matrix. Moreover, notice
+that in a weighted graph, if $W_{ij} = 0$, then there is not an edge
+between $v_i$ and $v_j$. On the otherhand, if $W_{ij} > 0$, then there is an
+edge between $v_i$ and $v_j$.
+
+Using this definition of a weighted graph, we can also define the **degree of a
+node $v_i$** by
+
+$$d(v_i) = \sum_{j=1}^m W_{ij},$$
+
+which no longer needs to be an integer for a weighted graph as it was for a
+directed or undirected graph. We can also define the **degree matrix** of a
+weighted graph to be the matrix whose diagonal entries are the degrees of each
+node.
 
 ## Graph Laplacian
+
+It turns our that the difference of the degree matrix and the adjacency matrix
+(or weight matrix) often shows up in applications as the coefficient matrix of a
+linear system that needs to be solved, or as tool to describe the connectivity
+of a graph, say, for clustering nodes.
+
+Formally, this difference, called the **Graph Laplacian** of a (directed or
+undirected) graphed $G=(V,E)$, is
+
+$$L = D - A,$$
+
+- where $D$ is the degree matrix of graph $G$;
+- and $A$ is the adjacency matrix of graph $G$.
+
+Analogously, the **Graph Laplacian** of a weighted graph, $G=(V,W)$, is
+
+$$L = D - W,$$
+
+where $D$ is the degree matrix of the weighted graph.
+
+In the case of a directed graph, the Graph Laplacian is also related to the
+incidence matrix, $B$, by the relationship
+
+$$L = B B'.$$
+
+Interestingly, it turns out that if the orientations of a directed graph are
+arbitrarily changed (for example, flipping the direction of $e_2$ and $e_5$),
+the *Graph Laplacian remains unchanged.* In other words, the Graph Laplacian
+reflects the underlying connectivity of the graph and is invariant to the
+orientation. We can use this idea to specify the corresponding relationship
+between the Graph Laplacian of a (weighted or undirected) graph and a variant
+of said graph's incidence matrix.
+
+For a graph $G = (V,E)$, let $G_\sigma$ denote the graph with the same set of
+nodes, but whose edges are now arbitrarily oriented according to some rule
+$\sigma$ that takes in an edge $e \in E$ and specifies an oriented edge $e'$,
+where the elements of $e$ and $e'$ are the same. Then, we can specify an
+incidence matrix $B(G_\sigma)$ corresponding to $G_\sigma$. Then,
+
+$$L(G) = L(G_\sigma) = B(G_\sigma) B(G_\sigma)'.$$
+
+Similarly, for a weighted graph $G = (V,W)$, we can
+
+1. Extract the underlying (unweighted, undirected) graph $\bar G$
+2. Using the underlying graph, specify an orientation function and create an underlying directed graph, $\bar G_\sigma$.
+3. Define the incidence matrix for any node $v_i$ in $\bar G_{\sigma}$ and edge $\bar e_j$ in $\bar G_{\sigma}$ by
+
+$$B_{ij}(\bar G_{\sigma}) = \begin{cases}
+\sqrt{W_{ij}} & s( \bar e_j ) = v_i, \\
+-\sqrt(W_{ij}) & t( \bar e_j) = v_i, \\
+0 & \textrm{otherwise.}
+\end{cases}$$
+
+Then,
+$$L(G) = L(\bar G_\sigma) = B( \bar G_\sigma) B( \bar G_\sigma)'.$$
+
+!!! danger
+
+    Insert Example 
