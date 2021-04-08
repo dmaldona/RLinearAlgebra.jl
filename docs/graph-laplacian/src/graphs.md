@@ -12,9 +12,7 @@ A **directed graph** is a pair $G = (V,E)$,
 
 Consider the following example of a graph $G = (V,E)$.
 
-!!! danger
-
-    INSERT EXAMPLE
+![Five Node Directed Graph](figures/png/directed_graph.png)
 
 Here,
 - the five nodes in the graph are $V = \lbrace v_1,v_2,v_3,v_4,v_5 \rbrace$,
@@ -101,9 +99,7 @@ the case of directed graphs.
 
 Consider the following example of a graph.
 
-!!! danger
-
-    Insert Example
+![Five Node (Undirected) Graph](figures/png/undirected_graph.png)
 
 Here,
 - the five nodes of the graph are $V = \lbrace v_1,v_2,v_3,v_4,v_5 \rbrace$;
@@ -312,6 +308,59 @@ $$B_{ij}(\bar G_{\sigma}) = \begin{cases}
 Then,
 $$L(G) = L(\bar G_\sigma) = B( \bar G_\sigma) B( \bar G_\sigma)'.$$
 
-!!! danger
+To demonstrate this feature of the Graph Laplacian's invariance to the
+orientation of the underlying graph, consider the three graphs in the following
+example.
 
-    Insert Example 
+![Weighted, Oriented Four Node Graph](figures/png/weighted_graph.png)
+
+- The pink graph is the original weighted graph with the specified edge weights.
+- The yellow graph is one orientation of the underlying unweighted graph.
+- The purple graph is another orientation of the underlying unweighted graph.
+
+The weight matrix, degree matrix and Graph Laplacian of the pink graph are
+
+$$W = \begin{bmatrix}
+0 & 0 & 4 & 0 \\
+0 & 0 & 9 & 0 \\
+4 & 9 & 0 & 1 \\
+0 & 0 & 1 & 0
+\end{bmatrix},$$
+
+$$D = \begin{bmatrix}
+4 & 0 & 0 & 0 \\
+0 & 9 & 0 & 0 \\
+0 & 0 & 14 & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix},$$
+
+and
+
+$$L = D - W = \begin{bmatrix}
+4 & 0 & -1 & 0 \\
+0 & 9 & -9 & 0 \\
+-4 & -9 & 14 & -1 \\
+0 & 0 & -1 & 1
+\end{bmatrix}.$$
+
+For the orientation in the yellow graph, the incidence matrix is
+
+$$B = \begin{bmatrix}
+2 & 0 & 0 \\
+0 & 3 & 0 \\
+-2 & -3 & -1 \\
+0 & 0 & 1
+\end{bmatrix}$$
+
+Computing $BB'$, we see that it is equal to $L$. Similarly, for the orientation
+in the purple graph, the incidence matrix is
+
+$$B = \begin{bmatrix}
+-2 & 0 & 0 \\
+0 & 3 & 0 \\
+2 & -3 & 1 \\
+0 & 0 & -1
+\end{bmatrix}.$$
+
+Computing $BB'$, we see that it is equal to $L$. This example demonstrates the
+Graph Laplacian's invariance to the orientation of the (weighted) graph.
