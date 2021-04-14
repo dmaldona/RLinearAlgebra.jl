@@ -141,3 +141,161 @@ Decomposition. The product of the lower triangular matrices generate the $L$ in
 the Cholesky Decomposition.
 
 ## Example of Scalar Cholesky Decomposition
+
+Consider decomposing the matrix,
+
+$$A = \begin{bmatrix}
+2 & -1 & -1 & 0 & 0 \\
+-1 & 4 & -1 & -1 & -1 \\
+-1 & -1 & 3 & -1 & 0 \\
+0 & -1 & -1 & 3 & -1 \\
+0 & -1 & 0 & -1 & 2
+\end{bmatrix}.$$
+
+Starting from the top left corner and following our procedure,
+
+$$L_1 = \begin{bmatrix}
+1 & \\
+-1/2 & 1 \\
+-1/2 & & 1 \\
+ 0 & & & 1 \\
+ 0 & & & & 1
+\end{bmatrix},$$
+
+and
+
+$$\begin{aligned}
+D_1 &= \begin{bmatrix}
+2 &  &  &  &  \\
+ & 4 & -1 & -1 & -1 \\
+ & -1 & 3 & -1 & 0 \\
+ & -1 & -1 & 3 & -1 \\
+ & -1 & 0 & -1 & 2
+\end{bmatrix} - \begin{bmatrix}
+ &  &  &  &  \\
+ & -1/2 & -1/2 & 0 & 0 \\
+ & -1/2 & -1/2 & 0 & 0 \\
+ & 0 & 0 & 0 & 0 \\
+ & 0 & 0 & 0 & 0
+\end{bmatrix}, \\
+&= \begin{bmatrix}
+2 &  &  &  &  \\
+ & 7/2 & -3/2 & -1 & -1 \\
+ & -3/2 & 5/2 & -1 & 0 \\
+ & -1 & -1 & 3 & -1 \\
+ & -1 & 0 & -1 & 2
+\end{bmatrix}
+\end{aligned}$$
+
+where missing entries are zero.
+
+Repeating the procedure for the block component of $D_1$, we calculate
+
+$$L_2 = \begin{bmatrix}
+1 & \\
+-3/7 & 1 \\
+-2/7 & & 1 \\
+-2/7 & & & 1,
+\end{bmatrix}$$
+
+and
+
+$$\begin{aligned}
+D_2 &= \begin{bmatrix}
+7/2 & & & \\
+&  5/2 & -1 & 0 \\
+&  -1 & 3 & -1 \\
+&  0 & -1 & 2
+\end{bmatrix} -
+\begin{bmatrix}
+0 & & & \\
+  & 9/14 & 3/7 & 3/7 \\
+  & 3/7 & 2/7 & 2/7 \\
+  & 3/7 & 2/7 & 2/7
+\end{bmatrix} \\
+&=\begin{bmatrix}
+7/2 & & & \\
+&  13/7 & -10/7 & -3/7 \\
+&  -10/7 & 19/7 & -9/7 \\
+&  -3/7 & -9/7 & 12/7
+\end{bmatrix}
+\end{aligned}$$
+
+Repeating the procedure for the block component of $D_2$, we calculate
+
+$$L_3 = \begin{bmatrix}
+1 & \\
+-10/13 & 1 \\
+-3/13 & & 1
+\end{bmatrix},$$
+
+and
+
+$$\begin{aligned}
+D_3 &= \begin{bmatrix}
+13/7 & & \\
+ & 19/7 & -9/7 \\
+ & -9/7 & 12/7
+\end{bmatrix} - \begin{bmatrix}
+0 & & \\
+  & 100/91 & 30/91 \\
+  & 30/91 & 9/91
+\end{bmatrix} \\
+&= \begin{bmatrix}
+13/7 & &  \\
+&147/91 & -147/91 \\
+&-147/91 & 147/91
+\end{bmatrix}.
+\end{aligned}$$
+
+For the last block diagonal of $D_3$, we conclude
+
+$$L_4 = \begin{bmatrix}
+1 & \\
+-1 & 1
+\end{bmatrix},$$
+
+and
+
+$$\begin{aligned}
+D_4 &= \begin{bmatrix}
+147/91 &  \\
+ & 147/91 - 147/91
+\end{bmatrix} = \begin{bmatrix}
+147/91 & \\
+ & 0
+\end{bmatrix}.
+\end{aligned}$$
+
+Finally, let $I_k$ denote the $k \times k$ identity matrix. We can compute
+
+$$\begin{aligned}
+L &= L_1 \begin{bmatrix}
+1 & \\
+  & L_2
+\end{bmatrix} \begin{bmatrix}
+I_2 & \\
+  & L_3
+\end{bmatrix} \begin{bmatrix}
+I_3 & \\
+  & L_4
+\end{bmatrix} \\
+&= \begin{bmatrix}
+1 & \\
+-1/2 & 1 \\
+-1/2 & - 3/7 & 1 \\
+0 & -2/7 & -10/13 & 1 \\
+0 & -2/7 & -3/13 & -1 & 1
+\end{bmatrix}.
+\end{aligned}$$
+
+Moreover, from $D_1,\ldots,D_4$, we can recover
+$$D = \begin{bmatrix}
+2 & \\
+  & 7/2 \\
+  & & 13/7 \\
+  & & & 147/91 \\
+  & & & & 0
+\end{bmatrix}.$$
+
+We can verify by direct calculation that $A = LDL'$.
