@@ -399,18 +399,15 @@ the $3 \times 3$ block of $D_1$. From our derivation,
 
 $$L_2 = \begin{bmatrix}
 -1 & -1
-\end{bmatrix},
-$$
+\end{bmatrix},$$
 
 and
 
-$$\begin{aligned}
-D_2 &= \begin{bmatrix}
+$$D_2 = \begin{bmatrix}
 13/7 & -10/7 &  \\
 -10/7 & 19/7 &  \\
  & & 0
-\end{bmatrix}
-\end{aligned}$$
+\end{bmatrix}.$$
 
 Now, computing
 $$\begin{aligned}
