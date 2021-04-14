@@ -4,7 +4,7 @@ makedocs(sitename="Randomized Graph Laplacian Algorithms",
     pages=[
         "Overview" => "index.md",
         "Graphs and Graph Laplacians" => "graphs.md",
-        "Cholesky Decomposition" => "cholesky.md"
+        "Cholesky Decompositions" => "cholesky.md"
     ])
 
 # Graphs are generated using tikz and pdflatex, see figures/
