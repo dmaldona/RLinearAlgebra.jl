@@ -103,7 +103,7 @@ where the empty entries are zeros. Then, we can verify by direct calculation,
 
 $$A = L_1 D_1 L_1'.$$
 
-Notice, $L_1$ is a lower triangular matrix and $A_1 := B_{22} - B_{21}B_{11}^{-1} B_{12}$ is SPSD by **Fact 1** above.
+Notice, $L_1$ is a lower triangular matrix and $B_{22} - B_{21}B_{11}^{-1} B_{12}$ is SPSD by **Fact 1** above.
 
 We can now proceed by repeating our argument to define a lower triangular $L_2$,
 and block diagonal matrix $D_2$ whose first block is $1 \times 1$ such that $A_1$
@@ -299,3 +299,144 @@ $$D = \begin{bmatrix}
 \end{bmatrix}.$$
 
 We can verify by direct calculation that $A = LDL'$.
+
+## Block Cholesky Decomposition
+
+We will see that the block Cholesky Decomposition can be derived almost
+identically to the scalar Cholesky Decomposition. Again, we begin by
+partitioning the matrix $A$ into
+
+$$A = \begin{bmatrix}
+B_{11} & B_{12} \\
+B_{21} & B_{22}
+\end{bmatrix},$$
+
+where $B_{11}$ is positive definite matrix of some dimension $d$ (smaller than
+the rank of $A$). Note, it is difficult to know beforehand whether $B_{11}$ is
+positive definite, so we need to know something about the blocks of our matrix
+before proceeding.
+
+We will now construct the Cholesky decomposition of $A$ incrementally, just
+as we did before. Let $n$ denote the number of rows in $A$. Define
+
+$$L_1 = \begin{bmatrix}
+I_d & \\
+B_{21}B_{11}^{-1} & I_{n-d}
+\end{bmatrix},$$
+
+where the empty entry is a row of zeros and $I_k$ is the $k \times k$ identity
+matrix. Also, define
+
+$$D_1 = \begin{bmatrix}
+B_{11} & \\
+   & B_{22} - B_{21}B_{11}^{-1} B_{12}
+\end{bmatrix},$$
+
+where the empty entries are zeros. Then, we can verify by direct calculation,
+
+$$A = L_1 D_1 L_1'.$$
+
+Notice, $L_1$ is a lower triangular matrix with block identity matrices on its
+diagonal. Moreover, $B_{22} - B_{21}B_{11}^{-1} B_{12}$ is SPSD by **Fact 1**
+above.
+
+We can now proceed by partitioning $B_{22} - B_{21}B_{11}^{-1} B_{12}$ just as
+we did for $A$, and computing $L_2$ and $D_2$ so that $L_2$ is a lower
+triangular matrix of dimension $n-d \times n-d$ with identity matrices on its
+block diagonal, and so that $D_2$ is block diagonal. We can then compute $L$
+and $D$ just as we did in the case of the scalar Cholesky Decomposition.
+
+## Example of Block Cholesky Decomposition
+
+Consider decomposing the matrix,
+
+$$A = \begin{bmatrix}
+2 & -1 & -1 & 0 & 0 \\
+-1 & 4 & -1 & -1 & -1 \\
+-1 & -1 & 3 & -1 & 0 \\
+0 & -1 & -1 & 3 & -1 \\
+0 & -1 & 0 & -1 & 2
+\end{bmatrix}.$$
+
+We will work with $2 \times 2$ blocks until we have exhausted all such blocks.
+From our derivation,
+
+$$L_1 = \begin{bmatrix}
+1 & \\
+  & 1 \\
+-5/7 & -3/7 & 1 \\
+-1/7 & -2/7 &  & 1 \\
+-1/7 & -2/7 &  & & 1
+\end{bmatrix},$$
+
+and
+
+$$\begin{aligned}
+D_1 &= \begin{bmatrix}
+2 & -1 & & & \\
+-1 & 4 & & & \\
+ & & 3 & -1 & 0 \\
+ & & -1 & 3 & -1 \\
+ & & 0 & -1 & 2
+\end{bmatrix} - \begin{bmatrix}
+& & & & & \\
+& & & & & \\
+& & 8/7 & 3/7 & 3/7 \\
+& & 3/7 & 2/7 & 2/7 \\
+& & 3/7 & 2/7 & 2/7
+\end{bmatrix} \\
+&= \begin{bmatrix}
+2 & -1 & & & \\
+-1 & 4 & & & \\
+ & & 13/7 & -10/7 & -3/7 \\
+ & & -10/7 & 19/7 & -9/7 \\
+ & & -3/7 & -9/7 & 12/7
+\end{bmatrix}
+\end{aligned}$$
+
+We now repeat the same exercise on the upper left $2 \times 2$ block matrix in
+the $3 \times 3$ block of $D_1$. From our derivation,
+
+$$L_2 = \begin{bmatrix}
+-1 & -1
+\end{bmatrix},
+$$
+
+and
+
+$$\begin{aligned}
+D_2 &= \begin{bmatrix}
+13/7 & -10/7 &  \\
+-10/7 & 19/7 &  \\
+ & & 0
+\end{bmatrix}
+\end{aligned}$$
+
+Now, computing
+$$\begin{aligned}
+L = L_1 \begin{bmatrix}
+1 \\
+0 & 1 \\
+0 & 0 & 1 \\
+0 & 0 & 0 & 1 \\  
+0 & 0 & -1 & -1 & 1
+\end{bmatrix} = \begin{bmatrix}
+1 & \\
+  & 1 \\
+-5/7 & -3/7 & 1 \\
+-1/7 & -2/7 &  & 1 \\
+-1/7 & -2/7 &  -1 & -1 & 1
+\end{bmatrix}
+\end{aligned}$$
+
+and letting
+
+$$D = \begin{bmatrix}
+2 & -1 & & & \\
+-1 & 4 & & & \\
+& & 13/7 & -10/7 &  \\
+& & -10/7 & 19/7 &  \\
+& & & & 0
+\end{bmatrix},$$
+
+we have $A = LDL'$.
