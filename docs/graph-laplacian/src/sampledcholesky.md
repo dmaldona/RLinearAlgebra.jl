@@ -9,7 +9,7 @@ sparsity has a nice interpretation as adding specific weighted edges to the
 graph that underlies the Graph Laplacian. Thus, one way to avoid the loss of
 sparsity is to sample the edges that are being added to the graph.
 
-!!!note
+!!! note
 
     This notion of adding edges to a graph is formalized using weighted multi-
     edge graphs. While such formality may be mathematically appropriate, it
@@ -31,10 +31,7 @@ we will create a **Sampled Cholesky Decomposition** that behaves well in
 practice.
 
 We will begin by understanding how we can interpret the Cholesky Decomposition
-of a Graph Laplacian as the aforementioned two step procedure. We will present
-this interpretation two ways: from a matrix perspective (i.e., dealing with
-Graph Laplacians), and then from a graph perspective (i.e., dealing with the
-graph directly). Then, we will discuss how we can generate
+of a Graph Laplacian as the aforementioned two step procedure. Then, we will discuss how we can generate
 **Sampled Cholesky Decompositions**, and `SparseCholesky`, specifically.
 
 ## Cholesky Decompositions of Graph Laplacians
@@ -48,10 +45,10 @@ entry. This ultimate feature can be written as
 $$L_{ii} = \sum_{j : j \neq j} |L_{ij}| = \sum_{j : j \neq i} |L_{ji}|.$$
 
 Suppose now, in specifying our Graph Laplacian, we decide that we no longer
-want the first row in the Graph Laplacian, which corresponds to eliminating a
-node in the underlying graph (as we will show later). Then, one simple way of
-updating $L$ to reflect this change is to delete the first column and row, and
-add the edge weights of the row to the diagonals.
+want the first node in the Graph Laplacian. Then, one simple way of
+updating $L$ to reflect this change is to delete the row and column corresponding
+to the node that we are to remove, and add the edge weights corresponding to the
+node back into the diagonal.
 
 In mathematical notation, if we write
 
@@ -89,7 +86,12 @@ $$L = \begin{bmatrix}
 13/7 & -10/7 & -3/7 \\
 -10/7 & 19/7 & -9/7 \\
 -3/7 & -9/7 & 12/7
-\end{bmatrix}.$$
+\end{bmatrix},$$
+
+which corresponds to the weighted graph
+
+![Three Node Weighted Graph](figures/png/weighted_graph_sc_01.png)
+
 
 If we remove the first row (and first column), the, according to the formula,
 the new Graph Laplacian is
@@ -112,7 +114,10 @@ $$\begin{aligned}
 \end{bmatrix},
 \end{aligned}$$
 
-which we see is a bona fide Graph Laplacian matrix.
+which we see is a bona fide Graph Laplacian matrix, and corresponds to the
+weighted graph
+
+![Three Node Graph, Deleted Node](figures/png/weighted_graph_sc_02.png)
 
 In general, we are often not interested in simply removing a row from a Graph
 Laplacian matrix, but rather we are interested in *eliminating the effect* of a
@@ -125,7 +130,7 @@ done above, and then compensate for it by adding edges or changing the weights o
 the reduced Graph Laplacian.
 
 One way of achieving this elimination while still maintaining the Graph Laplacian
-structure is to use the [Cholesky Decomposition](cholesky/index.html). In the
+structure is to use the [Cholesky Decomposition](../cholesky/). In the
 scalar Cholesky Decomposition, we recall that we incrementally constructed the
 Cholesky Decomposition one diagonal entry at a time. For instance, the first step
 of the scalar Cholesky Decomposition of the $d \times d$ Graph Laplacian $L$ is
@@ -184,8 +189,12 @@ $$\begin{aligned}
 13/7 & 0 & 0 \\
 0 & 147/91 & -147/91 \\
 0 & -147/91 & 147/91
-\end{bmatrix}
+\end{bmatrix},
 \end{aligned}$$
+
+which "corresponds" to the weighted graph represented by
+
+![Three Node Graph, Eliminated Node](figures/png/weighted_graph_sc_03.png)
 
 An important observation gleaned from this example is $L^{(2)} -
 \frac{1}{L_{11}}A_1A_1'$ is still a Graph Laplacian.
@@ -199,6 +208,19 @@ A_1 & -\mathrm{Diag}(A_1)
 where $\mathrm{Diag}(A_1)$ is a diagonal matrix whose diagonal entries are the
 components of $A_1$. Notice, $\mathcal{L}^{(1)}$ is the Graph Laplacian that
 corresponds to the first row and column of the original Graph Laplacian.
+
+In our example,
+$$\mathcal{L}^{(1)} = \begin{bmatrix}
+13/7 & -10/7 & -3/7 \\
+-10/7 & 10/7 & 0 \\
+-3/7 & 0 & 3/7
+\end{bmatrix},$$
+which corresponds to the weighted graph
+
+![Three Node Graph, Star Graph](figures/png/weighted_graph_sc_04.png)
+
+Such graphs actually have a special name: they are called **star graphs** as
+the edges emanate from a single node and make a vaguely star shaped image.
 
 Using $\mathcal{L}^{(1)}$, we can write the block diagonal in the Cholesky
 Decomposition as
@@ -234,8 +256,47 @@ A_1 & -\mathrm{Diag}(A_1)
 \end{bmatrix},$$
 which we can verify is a Graph Laplacian.
 
-Thus, we can interpret the diagonal term of the Cholesky Decomposition as
-the sum of
-- The diagonal term of the row that we intend to eliminate
-- The naive removal of the row from the Graph Laplacian
-- Accounting for the effect of this removal by 
+In our example, the third term is
+$$\begin{bmatrix}
+0 & 0 & 0 \\
+0 & 30/91 & -30/91 \\
+0 & -30/91 & 30/91
+\end{bmatrix},$$
+which corresponds to the weighted graph
+![Three Node Graph, Clique Graph](figures/png/weighted_graph_sc_05.png)
+
+In our example, the sum of these three terms is
+
+$$\begin{bmatrix}
+13/7 & 0 & 0 \\
+0 & 147/91 & -147/91 \\
+0 & -147/91 & 147/91
+\end{bmatrix} = \begin{bmatrix}
+13/7 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0
+\end{bmatrix} + \begin{bmatrix}
+0 & 0 & 0 \\
+0 & 100/91 & 30/91 \\
+0 & 30/91 & 9/91
+\end{bmatrix}  + \begin{bmatrix}
+0 & 0 & 0 \\
+0 & 30/91 & -30/91 \\
+0 & -30/91 & 30/91
+\end{bmatrix},$$
+
+which we can interpret as the "sum of graphs" as depicted by
+![Three Node Graph, Decomposition](figures/png/weighted_graph_sc_06.png)
+
+The last term is adding additional edge weights between the neighbors of the
+removed node. Such
+a graph is called a **clique graph**, and we will see it play a more prominent
+role in our more complex example in the next section. For now, this clique graph
+is actually the root cause of losing sparsity: when we eliminate a node using
+the cholesky decomposition, we remove its star graph but then replace it with
+the clique graph between the neighbors of the removed node. If the neighbors
+were not previously connected, then we have connected them through the Cholesky
+decomposition, which results in a loss of sparsity. The next example illustrates
+this more meaningfully.
+
+## Example of Cholesky on a Graph
