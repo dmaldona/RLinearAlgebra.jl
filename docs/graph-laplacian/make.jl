@@ -1,4 +1,4 @@
-using Documenter, RLinearAlgebra
+using Documenter
 
 makedocs(sitename="Randomized Graph Laplacian Algorithms",
     pages=[
