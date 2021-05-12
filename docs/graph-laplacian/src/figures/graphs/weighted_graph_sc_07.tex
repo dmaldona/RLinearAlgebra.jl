@@ -1,0 +1,22 @@
+\documentclass[border=5mm,tikz,convert]{standalone}
+\begin{document}
+\begin{tikzpicture}[
+nd/.style = {draw,circle,minimum size=2cm,pink},
+edg/.style = {draw,thick,pink},
+yel/.style = {draw,->,thick,yellow},
+pur/.style = {draw,->,thick,purple}
+]
+  \node[nd] (v1) at (0,5) {$v_1$};
+  \node[nd] (v2) at (-5,3) {$v_2$};
+  \node[nd] (v3) at (5,3) {$v_3$};
+  \node[nd] (v4) at (0,0) {$v_4$};
+  \node[nd] (v5) at (0,-5) {$v_5$};
+  
+  \path[edg] (v1)--(v2) node [midway, label=above:{$W_{12} = 1/2$}] {};
+  \path[edg] (v1)--(v3) node [midway, label=above:{$W_{13} = 3/2$}] {};
+  \path[edg] (v1)--(v4) node [midway, label=right:{$W_{14} = 1$}] {};
+  \path[edg] (v4)--(v5) node [midway, label=right:{$W_{45} = 1/4$}] {};
+
+  
+\end{tikzpicture}
+\end{document}
