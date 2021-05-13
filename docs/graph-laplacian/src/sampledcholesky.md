@@ -455,8 +455,8 @@ matrix is
 
 $$W_{ij}^S = \begin{cases}
 0 & i = j \\
-\frac{1}{A'\mathbf{1}} A_i A_j & L_{ij} = L_{ji} \neq 0 \\
-\frac{B_{ij}}{\pi A'\mathbf{1}} A_{i}A_j & L_{ij} = L_{ji} = 0.
+\frac{1}{A'\mathbf{1}} A_i A_j & L_{(i+1)(j+1)} = L_{(j+1)(i+1)} \neq 0 \\
+\frac{B_{ij}}{\pi A'\mathbf{1}} A_{i}A_j & L_{(i+1)(j+1)} = L_{(j+1)(i+1)} = 0.
 \end{cases}$$
 
 From this sampled weight matrix, we can construct a Graph Laplacian for the
@@ -468,7 +468,7 @@ L_{11} & 0 \\
 0 & 0
 \end{bmatrix} + (L - \mathcal{L}^{(1)}) + G.$$
 
-We now repeat this procedure on the $m-1$ by $m-1$ Graph $(L - \mathcal{L}^{(1)}) + G.$
+We now repeat this procedure on the $m-1$ by $m-1$ Graph Laplacian $(L - \mathcal{L}^{(1)}) + G.$
 
 ### `SparseCholesky `
 
