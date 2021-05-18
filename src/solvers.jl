@@ -58,8 +58,7 @@ function solve(sol::LinearSolver, type::TypeRPM, A, b)
     projection_type = type.projection
 
     #Stopping threshold
-    x_init = copy(b)
-    x_init .= 0.0
+    x_init = zeros(Float64, size(A,2))
 
     residual = norm(A*x_init - b)
     thresh = residual*sol.atol
